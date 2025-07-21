@@ -1,0 +1,78 @@
+<?php list($name, $pages, $level) = $this->yellow->getLayoutArguments() ?>
+<?php if (!$pages) $pages = $this->yellow->content->top() ?>
+<?php $this->yellow->page->setLastModified($pages->getModified()) ?>
+<?php $has_children = ""; $i = 0 ?>
+<?php if (!$level): ?>
+  <div class="col-10 col-md-8 d-none d-xl-block" data-aos="fade-down">
+    <nav class="site-navigation position-relative text-right text-lg-center" role="navigation">
+      <ul class="site-menu js-clone-nav mx-auto d-none d-lg-block">
+<?php endif ?>
+<?php foreach ($pages as $page): ?>
+  <?php $children = $page->getChildren() ?>
+  <?php if ($children->count()) { $has_children = "has-children"; } ?>
+  <?php $classes = $has_children ?>
+  <?php $page->isActive() ? $classes .= " active": "" ?>
+  <?php if(!$level AND !$has_children): ?>
+    <li<?php echo $classes ? " class=\"$classes\"":"" ?>>
+    <a href="<?php echo $page->getLocation(true) ?>"><?php echo $page->getHtml("titleNavigation") ?></a>
+    </li>
+    <?php if ($children->count()) { echo "\n"; $this->yellow->layout($name, $children, $level+1); } ?>
+  <?php elseif(!$level AND $has_children): ?>
+    <?php $j = 0; $i = $children->count() ?>
+    <li<?php echo $classes ? " class=\"$classes\"":"" ?>>
+    <a class = "hover main-top"><?php echo $page->getHtml("titleNavigation") ?></a>
+    <ul class="dropdown">
+	<?php
+	$file = 'tmp_counter';
+	if (!file_exists($file)) {
+		touch($file);
+	}
+	$handle = fopen($file, "r+");
+	if(flock($handle, LOCK_EX)) {
+
+		fwrite($handle, $i);
+		flock($handle, LOCK_UN);
+	}else{
+		die("Could not Lock File!");
+	}
+	fclose($handle);
+	?>
+  <?php endif ?>
+  <?php if($level): ?>
+  <?php
+  $i = file_get_contents("tmp_counter");
+  ?>
+	<?php if($j<=$i+1): ?>
+		<li<?php echo $classes ? " class=\"$classes\"":"" ?>>
+		<a href="<?php echo $page->getLocation(true) ?>"><?php echo $page->getHtml("titleNavigation") ?></a>
+		</li>
+		<?php $j++;?>
+	<?php endif ?>
+	<?php if($j==$i): ?>
+	  </ul>
+  </li>
+    <?php endif ?>
+  <?php endif ?>
+  <?php if ($children->count()) { echo "\n"; $this->yellow->layout($name, $children, $level+1); } ?>
+  <?php $has_children = "" ?>
+<?php endforeach ?>
+<?php if (!$level): ?>
+      </ul>
+    </nav>
+  </div>
+<div class="col-6 col-xl-2 text-right" data-aos="fade-down">
+  <div class="d-none d-xl-inline-block">
+    <ul class="site-menu js-clone-nav ml-auto list-unstyled d-flex text-right mb-0" data-class="social">
+      <li>
+        <a href="//www.facebook.com/YugaPhoto/" class="pl-0 pr-3" target="_blank" title="YugaPhoto @facebook"><span class="icon-facebook"></span></a>
+      </li>
+      <li>
+        <a href="//www.instagram.com/yugaphoto/" class="pl-3 pr-3" target="_blank" title="YugaPhoto @instagram"><span class="icon-instagram"></span></a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;"><a href="#" class="site-menu-toggle js-menu-toggle" title="Ava menüü"><span class="icon-menu h3"></span></a></div>
+
+</div>
+<?php endif ?>

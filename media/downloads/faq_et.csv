@@ -1,0 +1,14 @@
+﻿question_id,question,answer,category,language,stage_funnel
+,what is your name?,Super Maarioo2,general_questions,et,
+,who are you?,superman,general_questions,et,
+,u sure?,No,wedding,et,
+,hmm 4 ?,<p>paragraph tag</p>,general_questions,et,
+,mhm? 5,<b>bold</b>,general_questions,et,
+,имя?,Super Maarioo,general_questions,ru,
+,ты кто?,superman,general_questions,ru,
+,точно:?,Нет,wedding,ru,
+,hmm 4 ?,<p>paragraph tag</p>,general_questions,ru,
+,mhm? 5,<b>bold</b>,general_questions,ru,
+,,,,,
+,How does your style apply to my photoshoot experience and the kind of images I can expect?,"TODO: ""An example images sets and one full gallery can be found on each page of the <a>services</a>""",general_questions,,introduction/info
+,What's the first step to book you? What typically happens during your pre-shooting consultation and idea brainstorming session?,,,,

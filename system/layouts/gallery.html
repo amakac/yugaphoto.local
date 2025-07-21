@@ -1,0 +1,144 @@
+  <?php $this->yellow->layout("header") ?>
+<div class="site-section"  data-aos="fade">
+  <div class="container-fluid">
+    <?php if($this->yellow->page->getHtml("MainTitle")): ?>
+    <div class="row justify-content-center">
+      <div class="col-md-7">
+        <div class="row mb-5">
+          <div class="col-12 ">
+            <h2 class="site-section-heading text-center"><?php echo $this->yellow->page->getHtml("MainTitle") ?></h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <?php endif ?>
+    <div id="lightgallery" class="grid">
+      <div class="grid-sizer"></div>
+      <div class="row">
+            <?php $pathInstall = $this->yellow->system->get("coreServerInstallDirectory") ?>
+            <?php $pathImages = $this->yellow->lookup->findMediaDirectory("coreImageLocation") ?>
+  					<?php
+            $gallery_folder = $this->yellow->page->getHtml("GalleryFolder");
+            $path = $pathImages.$gallery_folder;
+            // echo $path;
+            $dirs = array_slice($this->yellow->extension->get("image")->getSubDirectories($path),1);
+            if ($dirs){
+              $paths = array();
+              foreach($dirs as $path){
+                $paths[] = $path;
+              }
+            }
+            // var_dump($dirs);
+            if(isset($paths)){
+                foreach ($paths as $path): ?>
+
+              <?php foreach ($this->yellow->toolbox->getDirectoryEntries($path, "/([a-z\-_0-9\/\:\.]*\.(jpg))/i", true, false) as $image): ?>
+                <?php if (basename($image) == "kaas.jpg"){ continue; } ?>
+                <?php
+                getimagesize($image, $info);
+                $header = ""; $description = "";
+                if (isset($info["APP13"])) {
+                    $iptc = iptcparse($info["APP13"]);
+                    if(isset($iptc["2#105"][0])){
+                      $header = "<h4>".$iptc["2#105"][0]."</h4>";
+                    }
+                    if(isset($iptc["2#120"][0])){
+                      $description = "<p>".$iptc["2#120"][0]."</p>";
+                    }
+                }
+                $alt = pathinfo($image, PATHINFO_FILENAME);
+                $alt = preg_split("/[\\s\\-|_]+/u",$alt);
+                unset($alt[0]);
+                $alt = implode(" ",$alt);
+                $alt = ucfirst(str_replace("-"," ", $alt));
+                $date_taken = DateTime::createFromFormat('Ymd', substr($iptc["2#055"][0], -8));
+                if($date_taken){
+                  $date_taken = $date_taken->format('m.Y');
+                  if($alt){
+                    $alt .= " <i>| ". $this->yellow->language->getTextHtml("GalleryPhotoTakenOn") . " ";
+                  } else{
+                    $alt .= "<i>". $this->yellow->language->getTextHtml("GalleryPhotoTakenOn") . " ";
+                  }
+                  $alt .= $date_taken. "</i>";
+                }
+                if ($this->yellow->extension->isExisting("image")) {
+                    $fileName = $image;
+                    list($src, $width, $height) = $this->yellow->extension->get("image")->getImageInformation($fileName, "100%", "100%");
+                    $height = (550/$width)*$height;
+                    list($src, $width, $height) = $this->yellow->extension->get("image")->getImageInformation($fileName, "550", "$height");
+                }
+                //var_dump($iptc);
+                $image = DIRECTORY_SEPARATOR.$image;
+                 ?>
+                <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item grid-item" data-exthumbimage="<?php echo $src ?>" data-src="<?php echo $image ?>"<?php if ($header OR $description): ?> data-sub-html="<?php echo $header.$description ?>"<?php endif ?>>
+                  <a href="#"><img src="<?php echo $src ?>" alt="<?php echo $alt ?>" class="img-fluid"></a>
+                </div>
+    					<?php endforeach; ?>
+            <?php endforeach; } else { ?>
+
+              <?php foreach ($this->yellow->toolbox->getDirectoryEntries($path, "/([a-z\-_0-9\/\:\.]*\.(jpg))/i", true, false) as $image): ?>
+                <?php if (basename($image) == "kaas.jpg"){ continue; } ?>
+                <?php
+                getimagesize($image, $info);
+                $header = ""; $description = "";
+                if (isset($info["APP13"])) {
+                    $iptc = iptcparse($info["APP13"]);
+                    if(isset($iptc["2#105"][0])){
+                      $header = "<h4>".$iptc["2#105"][0]."</h4>";
+                    }
+                    if(isset($iptc["2#120"][0])){
+                      $description = "<p>".$iptc["2#120"][0]."</p>";
+                    }
+                }
+                $alt = pathinfo($image, PATHINFO_FILENAME);
+                $alt = preg_split("/[\\s\\_|-]+/u",$alt);
+                unset($alt[0]);
+                $alt = implode(" ",$alt);
+                $alt = ucfirst(str_replace("-"," ", $alt));
+                $date_taken = DateTime::createFromFormat('Ymd', substr($iptc["2#055"][0], -8));
+                if($date_taken){
+                  $date_taken = $date_taken->format('m.Y');
+                  if($alt){
+                    $alt .= " <i>| ". $this->yellow->language->getTextHtml("GalleryPhotoTakenOn") . " ";
+                  } else{
+                    $alt .= "<i>". $this->yellow->language->getTextHtml("GalleryPhotoTakenOn") . " ";
+                  }
+                  $alt .= $date_taken. "</i>";
+                }
+                //print_r(date_parse($iptc["2#055"][0]));
+                if ($this->yellow->extension->isExisting("image")) {
+                    $fileName = $image;
+                    list($src, $width, $height) = $this->yellow->extension->get("image")->getImageInformation($fileName, "100%", "100%");
+                    $height = (550/$width)*$height;
+                    list($src, $width, $height) = $this->yellow->extension->get("image")->getImageInformation($fileName, "550", "$height");
+                }
+                $image = DIRECTORY_SEPARATOR.$image;
+                 ?>
+                <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item grid-item" data-exthumbimage="<?php echo $src ?>" data-src="<?php echo $image ?>"<?php if ($header OR $description): ?> data-sub-html="<?php echo $header.$description ?>"<?php endif ?>>
+                  <a href="#"><img src="<?php echo $src ?>" alt="<?php echo $alt ?>" class="img-fluid"></a>
+                </div>
+    					<?php endforeach; ?>
+            <?php } ?>
+      </div>
+    </div>
+<?php echo $this->yellow->page->getContentHtml() ?>
+  </div>
+</div>
+<?php $this->yellow->layout("footer") ?>
+<script>
+  $(document).ready(function(){
+    $('#lightgallery').lightGallery({
+      getCaptionFromTitleOrAlt: true,
+      rotate: false,
+      showThumbByDefault: false,
+      download: false,
+			actualSize: false,
+			zoom: false,
+      share: true,
+      googlePlus: false,
+      hideBarsDelay: 2000,
+      pause: 2700,
+      selector: '.item'
+    });
+  });
+</script>

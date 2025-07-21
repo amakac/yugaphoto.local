@@ -1,0 +1,50 @@
+<?php $this->yellow->layout("header") ?>
+<div class="site-section"  data-aos="fade">
+  <div class="container-fluid">
+    <?php if($this->yellow->page->getHtml("MainTitle")): ?>
+    <div class="row justify-content-center">
+      <div class="col-md-7">
+        <div class="row mb-5">
+          <div class="col-12 ">
+            <h2 class="site-section-heading text-center"><?php echo $this->yellow->page->getHtml("MainTitle") ?></h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <?php endif ?>
+    <?php
+    $url = $this->yellow->page->getUrl();
+    list($scheme, $address, $base) = $this->yellow->lookup->getUrlInformation($url);
+    ?>
+    <?php $pages = $this->yellow->content->find($base."/")->getChildren() ?>
+    <?php $this->yellow->page->setLastModified($pages->getModified()) ?>
+    <?php $images = $this->yellow->toolbox->getDirectoryEntries($this->yellow->lookup->findMediaDirectory("coreImageLocation"), "/([a-z\-_0-9\/\:\.]*\.(jpg))/i", true, false) ?>
+    <div class="row">
+      <?php foreach ($pages as $page): ?>
+      <?php
+      $serviceImage = "";
+      foreach ($images as $image) {
+        if (basename($image) == $page->getHtml("image")) {
+          $serviceImage = $image;
+          break;
+        }
+      }
+      list($serviceImage, $width, $height) = $this->yellow->extension->get("image")->getImageInformation($serviceImage, "80", "80");    
+      ?>
+      <div class="col-lg-4">
+        <div class="image-wrap-2">
+          <div class="image-info">
+            <?php if ($page->getHtml("Subtitle")): ?>
+            <h2 class="mb-3 h3"><?php echo $page->getHtml("Subtitle") ?></h2>
+            <?php endif; ?>
+            <a href="<?php echo $page->getUrl() ?>" class="btn btn-outline-white py-2 px-4"><?php echo $page->getHtml("title") ?></a>
+          </div>
+          <img src="<?php echo $serviceImage ?>" alt="<?php echo $page->getHtml("titleHeader") ?>" class="img-fluid" loading="lazy">
+        </div>
+      </div>
+      <?php endforeach ?>
+    </div>
+<?php echo $this->yellow->page->getContentHtml() ?>
+  </div>
+</div>
+<?php $this->yellow->layout("footer") ?>

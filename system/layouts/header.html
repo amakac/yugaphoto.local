@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="<?php echo $this->yellow->page->getHtml("language") ?>">
+<head>
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-0KYJCVPDXN"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-0KYJCVPDXN');
+</script> -->
+<title><?php echo $this->yellow->page->getHtml("titleHeader")." ❤️ ".$this->yellow->page->getHtml("Sitename") ?></title>
+<meta charset="utf-8" />
+<meta name="description" content="<?php echo $this->yellow->page->getHtml("description") ?>" />
+<?php if ($this->yellow->page->getHtml("noarchive")):?><meta name="robots" content="noarchive" />
+<?php endif ?>
+<meta name="author" content="<?php echo $this->yellow->page->getHtml("author") ?>" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<base target="_self">
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/media/themes/yugaphoto/fonts/icomoon/style.css">
+<link rel="stylesheet" href="/media/themes/yugaphoto/css/bootstrap.min.css">
+<link rel="stylesheet" href="/media/themes/yugaphoto/css/magnific-popup.css">
+<link rel="stylesheet" href="/media/themes/yugaphoto/css/jquery-ui.css">
+<link rel="stylesheet" href="/media/themes/yugaphoto/css/owl.carousel.min.css">
+<link rel="stylesheet" href="/media/themes/yugaphoto/css/owl.themes.default.min.css">
+<link rel="stylesheet" href="/media/themes/yugaphoto/css/lightgallery.min.css">
+<link rel="stylesheet" href="/media/themes/yugaphoto/css/bootstrap-datepicker.css">
+<link rel="stylesheet" href="/media/themes/yugaphoto/fonts/flaticon/font/flaticon.css">
+<link rel="stylesheet" href="/media/themes/yugaphoto/css/swiper.css">
+<link rel="stylesheet" href="/media/themes/yugaphoto/css/masonry.css">
+<link rel="stylesheet" href="/media/themes/yugaphoto/css/style.css">
+<script src="/media/themes/yugaphoto/js/jquery-3.3.1.min.js"></script>
+<script src="/media/themes/yugaphoto/js/jquery-migrate-3.0.1.min.js"></script>
+<script src="/media/themes/yugaphoto/js/jquery-ui.js"></script>
+<script src="/media/themes/yugaphoto/js/popper.min.js"></script>
+<script src="/media/themes/yugaphoto/js/bootstrap.min.js"></script>
+<script src="/media/themes/yugaphoto/js/owl.carousel.min.js"></script>
+<script src="/media/themes/yugaphoto/js/jquery.stellar.min.js"></script>
+<script src="/media/themes/yugaphoto/js/jquery.countdown.min.js"></script>
+<script src="/media/themes/yugaphoto/js/jquery.magnific-popup.min.js"></script>
+<script src="/media/themes/yugaphoto/js/bootstrap-datepicker.min.js"></script>
+<script src="/media/themes/yugaphoto/js/swiper.min.js"></script>
+<script src="/media/themes/yugaphoto/js/picturefill.min.js"></script>
+<script src="/media/themes/yugaphoto/js/lightgallery-all.min.js"></script>
+<script src="/media/themes/yugaphoto/js/jquery.mousewheel.min.js"></script>
+<script src="/media/themes/yugaphoto/js/imagesloaded.pkgd.min.js"></script>
+<?php echo $this->yellow->page->getExtraHtml("header") ?>
+<?php $pagesMultiLanguage = $this->yellow->content->multi($this->yellow->page->location) ?>
+</head>
+<body>
+  <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const mobileMenuBody = document.querySelector('.site-mobile-menu-body');
+        if (mobileMenuBody) {
+          const langNode = document.createElement('div');
+          langNode.className = 'language-switcher';
+          langNode.innerHTML = `
+          <?php if (count($pagesMultiLanguage) > 1): ?>
+          <?php foreach($pagesMultiLanguage as $page): ?>
+            <?php if ($page->isActive() == 'active'): ?>
+              <span style="color:#20c997;"><?php echo strtoupper($this->yellow->language->getTextHtml("LanguageSwitcher", $page->get("language"))) ?></span>
+            <?php else: ?>
+              <a href="<?php echo $page->getLocation(true) ?>" class="pl-1 pr-1" target="_self" title="<?php echo $this->yellow->language->getTextHtml("languageDescription", $page->get("language")) ?>"><?php echo strtoupper($this->yellow->language->getTextHtml("LanguageSwitcher", $page->get("language"))) ?></a>
+            <?php endif ?>
+          <?php endforeach ?>
+          <?php endif ?>`;
+          mobileMenuBody.prepend(langNode);
+        }
+      });
+  </script>
+  <div class="site-wrap">
+    <div class="site-mobile-menu" role="navigation" aria-label="<?php echo $this->yellow->language->getTextHtml("coreMobileNavigation") ?>">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close mt-3">
+          <span class="icon-close2 js-menu-toggle"></span>
+        </div>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div>
+
+    <header class="site-navbar py-3" role="header">
+
+      <div class="container-fluid">
+        <div class="row align-items-center">
+          <div class="col-6 col-xl-3" data-aos="fade-down">
+            <?php if($this->yellow->page->getHtml("Keywords")): ?>
+            <h1 class="h6 mb-0"><?php echo $this->yellow->page->getHtml("Keywords") ?></h1>
+            <?php else: ?>
+            <h1 class="h6 mb-0"><?php echo $this->yellow->page->getHtml("titleContent") ?></h1>
+            <?php endif;?>
+            <h2 class="mb-0"><a href="<?php echo $this->yellow->page->getBase(true)."/" ?>" class="text-white h2 mb-0"><?php echo $this->yellow->page->getHtml("sitename") ?></a></h2>
+          </div>
+          <?php $this->yellow->layout("navigation") ?>
+        </div>
+      </div>
+
+    </header>
+    <?php echo $this->yellow->page->getExtraHtml("breadcrumb") ?>

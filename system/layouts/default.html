@@ -1,0 +1,18 @@
+<?php $this->yellow->layout("header") ?>
+<div class="site-section"  data-aos="fade">
+  <div class="container-fluid">
+    <?php if($this->yellow->page->getHtml("MainTitle")): ?>
+    <div class="row justify-content-center">
+      <div class="col-md-7">
+        <div class="row mb-5">
+          <div class="col-12 ">
+            <h2 class="site-section-heading text-center"><?php echo $this->yellow->page->getHtml("MainTitle") ?></h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <?php endif ?>
+<?php echo $this->yellow->page->getContentHtml() ?>
+  </div>
+</div>
+<?php $this->yellow->layout("footer") ?>

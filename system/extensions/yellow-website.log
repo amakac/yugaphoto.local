@@ -1,0 +1,109 @@
+2025-05-26 21:37:21 info Install Datenstrom Yellow 0.9, PHP 7.4.33, Built-in 7.4.33, Linux
+2025-05-26 21:37:21 info Install extension 'Update 0.9.4'
+2025-05-26 21:37:21 info Install extension 'Core 0.9.15'
+2025-05-26 21:37:21 info Install extension 'Edit 0.9.10'
+2025-05-26 21:37:21 info Install extension 'Generate 0.9.7'
+2025-05-26 21:37:21 info Install extension 'Image 0.9.3'
+2025-05-26 21:37:21 info Install extension 'Markdown 0.9.3'
+2025-05-26 21:37:21 info Install extension 'Serve 0.9.1'
+2025-05-26 21:37:21 info Install extension 'Stockholm 0.9.2'
+2025-05-26 21:37:21 info Install extension 'English 0.9.2'
+2025-05-26 21:37:21 info Install extension 'German 0.9.2'
+2025-05-26 21:37:21 info Install extension 'Swedish 0.9.2'
+2025-05-26 21:52:42 info Add user 'anton'
+2025-05-26 21:55:05 info Install extension 'Breadcrumb 0.9.1'
+2025-05-26 22:12:18 info Install extension 'Russian 0.9.2'
+2025-05-26 22:14:13 info Install extension 'Paris 0.9.2'
+2025-05-26 22:14:28 error Process file 'system/layouts/multiple-galleries.html' with fatal error!
+2025-05-26 22:16:20 info Install extension 'Gallery 0.9.2'
+2025-05-26 22:16:43 error Process file 'system/layouts/multiple-galleries.html' with fatal error!
+2025-05-26 22:16:51 error Process file 'system/layouts/multiple-galleries.html' with fatal error!
+2025-05-26 22:17:14 error Process file 'system/layouts/gallery.html' with fatal error!
+2025-05-26 22:17:35 error Process file 'system/layouts/homepage.html' with fatal error!
+2025-05-26 22:18:25 error Process file 'system/layouts/subpages-list.html' with fatal error!
+2025-05-26 22:20:47 info Install extension 'Instagram 0.9.1'
+2025-05-26 22:22:16 error Process file 'system/layouts/homepage.html' with fatal error!
+2025-05-26 22:22:18 error Process file 'system/layouts/subpages-list.html' with fatal error!
+2025-05-26 22:24:26 info Install extension 'Meta 0.9.3'
+2025-05-26 22:25:19 info Install extension 'Sitemap 0.9.3'
+2025-05-26 22:26:12 info Install extension 'Draft 0.9.1'
+2025-05-26 22:27:32 info Install extension 'Bundle 0.9.5'
+2025-05-26 22:29:17 info Install extension 'Anchor 0.9.3'
+2025-05-26 22:29:31 error Process file 'system/layouts/homepage.html' with fatal error!
+2025-05-26 22:29:34 error Process file 'system/layouts/gallery.html' with fatal error!
+2025-05-26 22:31:43 error Process file 'system/layouts/gallery.html' with fatal error!
+2025-05-26 22:32:09 error Process file 'system/layouts/gallery.html' with fatal error!
+2025-05-26 22:32:13 error Process file 'system/layouts/homepage.html' with fatal error!
+2025-05-26 22:39:57 error Process file 'system/layouts/multiple-galleries.html' with fatal error!
+2025-05-26 22:40:01 error Process file 'system/layouts/subpages-list.html' with fatal error!
+2025-05-26 22:40:23 error Process file 'system/layouts/subpages-list.html' with fatal error!
+2025-05-26 22:43:16 error Process file 'system/layouts/gallery.html' with fatal error!
+2025-05-26 23:26:05 error Process file 'system/layouts/header.html' with fatal error!
+2025-05-26 23:26:05 error Process file 'system/layouts/header.html' with fatal error!
+2025-05-26 23:26:05 error Process file 'system/layouts/header.html' with fatal error!
+2025-05-26 23:26:06 error Process file 'system/layouts/header.html' with fatal error!
+2025-05-26 23:26:06 error Process file 'system/layouts/header.html' with fatal error!
+2025-05-26 23:26:06 error Process file 'system/layouts/header.html' with fatal error!
+2025-05-26 23:26:06 error Process file 'system/layouts/header.html' with fatal error!
+2025-05-27 00:19:16 error Process file 'system/layouts/paris-navigation.html' with fatal error!
+2025-05-29 11:22:08 info Install extension 'Include 0.9.1'
+2025-05-29 18:12:27 info Uninstall extension 'Gallery 0.9.2'
+2025-05-29 19:37:42 info Uninstall extension 'Swedish 0.9.2'
+2025-05-29 19:37:49 info Uninstall extension 'German 0.9.2'
+2025-05-29 19:55:21 error Process file 'system/layouts/homepage.html' with fatal error!
+2025-05-29 19:57:00 error Process file 'system/layouts/homepage.html' with fatal error!
+2025-05-29 19:57:29 error Process file 'system/layouts/homepage.html' with fatal error!
+2025-05-29 19:57:46 error Process file 'system/layouts/homepage.html' with fatal error!
+2025-05-29 20:01:49 error Process file 'system/layouts/homepage.html' with fatal error!
+2025-05-29 20:02:56 error Process file 'system/layouts/homepage.html' with fatal error!
+2025-05-29 20:03:49 error Process file 'system/layouts/homepage.html' with fatal error!
+2025-05-29 20:04:23 error Process file 'system/layouts/homepage.html' with fatal error!
+2025-05-29 20:47:56 info Install extension 'Lastedit 0.9.1'
+2025-05-29 20:47:56 error Process file 'system/layouts/homepage.html' with fatal error!
+2025-05-29 20:49:17 error Process file 'system/layouts/homepage.html' with fatal error!
+2025-05-29 20:59:19 error Process file 'system/workers/lastedit.php' with fatal error!
+2025-05-29 21:00:30 error Process file 'system/workers/lastedit.php' with fatal error!
+2025-05-29 21:13:00 error Process file 'system/workers/lastedit.php' with fatal error!
+2025-05-29 21:16:47 error Process file 'system/workers/lastedit.php' with fatal error!
+2025-05-29 21:17:38 error Process file 'system/workers/lastedit.php' with fatal error!
+2025-05-29 21:18:03 error Process file 'system/workers/lastedit.php' with fatal error!
+2025-05-29 21:19:44 error Process file 'system/layouts/homepage.html' with fatal error!
+2025-05-29 21:22:17 info Uninstall extension 'Lastedit 0.9.0'
+2025-05-29 21:43:14 error Process file 'system/layouts/homepage.html' with fatal error!
+2025-05-31 08:15:25 error Process file 'system/layouts/homepage.html' with fatal error!
+2025-05-31 19:51:29 error Process file 'system/layouts/header.html' with fatal error!
+2025-05-31 19:51:30 error Process file 'system/layouts/header.html' with fatal error!
+2025-05-31 19:51:51 error Process file 'system/layouts/paris-navigation.html' with fatal error!
+2025-05-31 19:51:52 error Process file 'system/layouts/paris-navigation.html' with fatal error!
+2025-06-01 09:33:56 error Process file 'system/layouts/multiple-galleries.html' with fatal error!
+2025-06-14 20:58:10 info Install extension 'Table 0.9.3'
+2025-07-08 12:55:45 error Process file 'system/layouts/multiple-galleries.html' with fatal error!
+2025-07-08 12:59:22 error Process file 'system/layouts/multiple-galleries.html' with fatal error!
+2025-07-08 12:59:33 error Process file 'system/layouts/multiple-galleries.html' with fatal error!
+2025-07-08 12:59:47 error Process file 'system/layouts/multiple-galleries.html' with fatal error!
+2025-07-11 08:51:17 error Process file 'system/workers/table.php' with fatal error!
+2025-07-11 10:06:44 error Process file 'system/workers/table.php' with fatal error!
+2025-07-11 10:16:14 error Process file 'system/workers/table.php' with fatal error!
+2025-07-11 10:16:57 error Process file 'system/workers/table.php' with fatal error!
+2025-07-11 10:17:57 error Process file 'system/workers/table.php' with fatal error!
+2025-07-11 10:24:33 error Process file 'system/workers/table.php' with fatal error!
+2025-07-11 10:37:15 error Process file 'system/workers/table.php' with fatal error!
+2025-07-11 10:37:34 error Process file 'system/workers/table.php' with fatal error!
+2025-07-11 10:37:34 error Process file 'system/workers/table.php' with fatal error!
+2025-07-11 17:13:28 error Process file 'system/workers/image.php' with fatal error!
+2025-07-11 17:15:01 error Process file 'system/workers/image.php' with fatal error!
+2025-07-13 10:03:00 error Process file 'system/workers/image.php' with fatal error!
+2025-07-13 10:03:53 error Process file 'system/workers/image.php' with fatal error!
+2025-07-13 10:05:54 error Process file 'system/workers/image.php' with fatal error!
+2025-07-13 10:06:02 error Process file 'system/workers/image.php' with fatal error!
+2025-07-13 10:06:04 error Process file 'system/workers/image.php' with fatal error!
+2025-07-13 10:08:16 error Process file 'system/workers/image.php' with fatal error!
+2025-07-13 10:09:08 error Process file 'system/workers/image.php' with fatal error!
+2025-07-13 10:09:09 error Process file 'system/workers/image.php' with fatal error!
+2025-07-13 10:09:20 error Process file 'system/workers/image.php' with fatal error!
+2025-07-13 10:11:08 error Process file 'system/workers/image.php' with fatal error!
+2025-07-13 10:11:11 error Process file 'system/workers/image.php' with fatal error!
+2025-07-13 10:12:43 error Process file 'system/workers/image.php' with fatal error!
+2025-07-13 10:12:49 error Process file 'system/workers/image.php' with fatal error!
+2025-07-13 10:15:24 error Process file 'system/workers/image.php' with fatal error!
+2025-07-15 00:18:23 error Process file 'system/workers/core.php' with fatal error!

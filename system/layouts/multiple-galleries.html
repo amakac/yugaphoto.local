@@ -1,0 +1,138 @@
+<?php $this->yellow->layout("header") ?>
+<div class="site-section"  data-aos="fade">
+  <div class="container-fluid">
+    <?php if($this->yellow->page->getHtml("MainTitle")): ?>
+    <div class="row justify-content-center">
+      <div class="col-md-7">
+        <div class="row mb-5">
+          <div class="col-12 ">
+            <h2 class="site-section-heading text-center"><?php echo $this->yellow->page->getHtml("MainTitle") ?></h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <?php endif ?>
+    <div class="row">
+      <?php $pathInstall = $this->yellow->system->get("coreServerInstallDirectory") ?>
+      <?php $pathImages = $this->yellow->lookup->findMediaDirectory("coreImageLocation") ?>
+      <?php
+      $galleries_folder = $this->yellow->page->getHtml("GalleryFolder");
+      $galleries_folder = $pathInstall.$pathImages.$galleries_folder;
+      $dirs = array_slice($this->yellow->extension->get("image")->getSubDirectories($galleries_folder),1);
+      $i = count($dirs)-1;
+      $j = 1;
+      $paths = array();
+      $dirs = array_map(function($path) use ($pathImages) {
+          $substring = strstr($path, $pathImages);
+          return $substring !== false ? $substring : $path;
+      }, $dirs);
+      $dirs = array_filter($dirs, function($path) {
+          $files = $this->yellow->toolbox->getDirectoryEntries(
+              $path,
+              "/([a-z\-_0-9\/\:\.]*\.(jpg))/i",
+              true,
+              false
+          );
+          return count($files) > 0;
+      });
+
+      // echo var_dump($dirs);
+      // exit;
+      foreach($dirs as $path): ?>
+      <?php
+      $paths[] = $path;
+
+      $parent_dirname = basename($path);
+      $parent_dirname = preg_split("/[\\s\\-|_]+/u", $parent_dirname);
+      unset($parent_dirname[0]);
+      $parent_dirname = implode(" ",$parent_dirname);
+      $parent_dirname = ucfirst(str_replace("-"," ", $parent_dirname));
+
+      //$parent_dirname = $path;
+      //$parent_dirname = explode("-", basename($parent_dirname));
+      $imgs_count = count($this->yellow->toolbox->getDirectoryEntries($path, "/([a-z\-_0-9\/\:\.]*\.(jpg))/i", true, false))-1 ?>
+      <div class="col-lg-4" id="lightgallery<?php $n=$i-($i-$j); echo "-$n" ?>">
+        <div class="image-wrap-2">
+          <div class="image-info">
+            <span class="btn btn-outline-white py-2 px-4">Vaata pilte (<?php echo $imgs_count ?>)</span>
+            <?php if ($gallery_title = $this->yellow->page->getHtml("GalleryTitle-$n")):?><h2 class="mb-3 h4"><?php echo $this->yellow->page->getHtml("GalleryTitle-$n") ?></h2>
+            <?php elseif ($gallery_title == "" AND isset($parent_dirname)): ?>
+              <h2 class="mb-0 mt-4 h4"><?php echo ucfirst($parent_dirname) ?></h2>
+            <?php $gallery_title = $parent_dirname; endif ?>
+          </div>
+          <img src="<?php echo "/$path/kaas.jpg"?>" alt="<?php echo $gallery_title ?>" title="<?php echo $this->yellow->page->getHtml("MainTitle"). ": ". $gallery_title ?>" class="img-fluid" loading="lazy">
+        </div>
+  			<?php // endforeach; ?>
+            </div>
+      <?php $j++; endforeach; ?>
+    </div>
+<?php echo $this->yellow->page->getContentHtml() ?>
+  </div>
+</div>
+<?php $this->yellow->layout("footer") ?>
+<script>
+  <?php $i=1; foreach ($paths as $path): ?>
+<?php $images = $this->yellow->toolbox->getDirectoryEntries($path, "/([a-z\-_0-9\/\:\.]*\.(jpg))/i", true, false) ?>
+$('#lightgallery<?php echo "-$i" ?>').on('click', function() {
+    $(this).lightGallery({
+        galleryId: <?php echo "-$i" ?>,
+        rotate: false,
+        animateThumb: false,
+        showThumbByDefault: false,
+        autoplayControls: false,
+        download: false,
+				actualSize: false,
+				zoom: false,
+        share: true,
+        googlePlus: false,
+        hideBarsDelay: 2000,
+        pause: 2700,
+        dynamic: true,
+        dynamicEl: [<?php $j=1; foreach ($images as $image): ?><?php if (basename($image) == "kaas.jpg"){ continue; } ?>
+            <?php
+            getimagesize($image, $info);
+            $header = ""; $description = "";
+            if (isset($info["APP13"])) {
+                $iptc = iptcparse($info["APP13"]);
+                if(isset($iptc["2#105"][0])){
+                  $header = "<h4>".$iptc["2#105"][0]."</h4>";
+                }
+                if(isset($iptc["2#120"][0])){
+                  $description = "<p>".$iptc["2#120"][0]."</p>";
+                }
+            }
+            //var_dump($iptc);
+            $alt = pathinfo($image, PATHINFO_FILENAME);
+            $alt = preg_split("/[\\s\\-|_]+/u", $alt);
+            unset($alt[0]);
+            $alt = implode(" ",$alt);
+            $alt = ucfirst(str_replace("-"," ", $alt));
+            $date_taken = DateTime::createFromFormat('Ymd', substr($iptc["2#055"][0], -8));
+            if($date_taken){
+              $date_taken = $date_taken->format('m.Y');
+              if($alt){
+                $alt .= " <i>| ". $this->yellow->language->getTextHtml("GalleryPhotoTakenOn") . " ";
+              } else{
+                $alt .= "<i>". $this->yellow->language->getTextHtml("GalleryPhotoTakenOn") . " ";
+              }
+              $alt .= $date_taken. "</i>";
+            }
+            $alt = "<h4>".$alt."</h4>";
+            if ($this->yellow->extension->isExisting("image")) {
+                $fileName = $image;
+                list($src, $width, $height) = $this->yellow->extension->get("image")->getImageInformation($fileName, "100", "80");
+            }
+            echo "\n";
+             ?>
+            {
+            "src": '<?php echo "/$image" ?>',
+            'thumb': '<?php echo "$src" ?>'<?php if ($header OR $description): ?>,
+            'subHtml': '<?php echo $header.$description ?>'<?php elseif($alt): ?>,
+            'subHtml': '<?php echo $alt ?>'<?php endif ?>
+}<?php if ($j !== count($images)-1): ?>,<?php endif; ?>
+        <?php $j++; endforeach; echo "\n" ?>
+        ]
+    })
+  });
+  <?php $i++; endforeach ?>
+</script>
