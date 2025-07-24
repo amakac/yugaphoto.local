@@ -240,11 +240,12 @@ class YellowTable {
                     hideBarsDelay: 1000,
                     pause: 2600,
                     dynamic: true,
-                    dynamicEl: [";
+                    dynamicEl: [";                    
+                    $images = array_filter($images, function($image) {
+                        return strpos($image, 'kaas.jpg') === false;
+                    });
                     $j = 1;
                     foreach ($images as $image) {
-
-                        if (basename($image) == "kaas.jpg"){ continue; }
 
                         getimagesize($image, $info);
                         $header = ""; $description = "";
@@ -294,7 +295,7 @@ class YellowTable {
                         }
                         $output .= '
                         }';
-                        if ($j !== count($images)-1) {
+                        if ($j !== count($images)) {
                             $output .= ",";
                         }
                         $j++;
