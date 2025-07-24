@@ -26,8 +26,8 @@ class YellowTable {
         return array_pad($tokens, $sizeMin, "");
     }
     function galleryId($client_id) {
-        $hash = $this->murmur3_hash($client_id) % (36**5); // Ensure it's within a 5-char range
-        return abs($hash % 10000);
+        $hash = $this->murmur3_hash($client_id) % (36**6); // Ensure it's within a 5-char range
+        return abs($hash % 100000);
     }
 
     function murmur3_hash($key, $seed = 0) {
@@ -125,7 +125,7 @@ class YellowTable {
             $j = 1;
             // implement dynamic bootstrap grid calculation depending on odd/even and galleries numbers in folder VS 2-3 / 4-6+ galleries
             $paths = array();
-        $dirs = array_map(function($path) use ($pathImages) {
+            $dirs = array_map(function($path) use ($pathImages) {
                 $substring = strstr($path, $pathImages);
                 return $substring !== false ? $substring : $path;
             }, $dirs);
