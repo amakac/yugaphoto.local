@@ -130,6 +130,9 @@ class YellowTable {
                 return $substring !== false ? $substring : $path;
             }, $dirs);
             $dirs = array_filter($dirs, function($path) {
+                if (preg_match('/(exclude|-excl)/i', basename($path))) {
+                    return false;
+                }
                 $files = $this->yellow->toolbox->getDirectoryEntries(
                     $path,
                     "/([a-z\-_0-9\/\:\.]*\.(jpg))/i",
