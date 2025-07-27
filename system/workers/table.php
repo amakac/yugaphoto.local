@@ -158,7 +158,7 @@ class YellowTable {
                 }
                 $output .= '
                         </div>
-                        <img src="' . "/$path/kaas.jpg" . '" alt="' . $gallery_title . '" title="' . $this->yellow->page->getHtml("MainTitle") . ": " . $gallery_title . '" class="img-fluid" loading="lazy">
+                        <img src="' . "/$path/kaas.jpg" . '" alt="' . $gallery_title . '" title="' . $this->yellow->page->getHtml("MainTitle") . ": " . $gallery_title . '" class="img-fluid original" loading="lazy">
                     </div>
                 </div>';
                 $j++;
