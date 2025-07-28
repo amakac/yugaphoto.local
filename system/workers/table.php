@@ -177,6 +177,10 @@ class YellowTable {
 
             foreach ($paths as $path) {
                 $images = $this->yellow->toolbox->getDirectoryEntries($path, "/([a-z\-_0-9\/\:\.]*\.(jpg))/i", true, false);
+
+                $images = array_filter($images, function($image) {
+                    return strpos($image, 'kaas.jpg') === false;
+                });
                 
                 foreach ($images as $image) {
                     $iptc = [];
