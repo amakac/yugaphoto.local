@@ -1,5 +1,5 @@
 ---
-titleHeader: Portrait & Lifestyle photography services
+titleHeader: Portrait & Lifestyle photography services in Tallinn
 Title: Portrait and family
 MainTitle: Portrait & Lifestyle
 Keywords: Portrait & Lifestyle
