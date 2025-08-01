@@ -201,6 +201,8 @@ class YellowTable {
                     $structuredImage = [
                         "@context" => "https://schema.org/",
                         "@type" => "ImageObject",
+                        "@id" => rtrim($baseUrl, '/') . '/' . ltrim($image, '/'),
+                        "url" => rtrim($baseUrl, '/') . '/' . ltrim($image, '/'),
                         "contentUrl" => rtrim($baseUrl, '/') . '/' . ltrim($image, '/'),
                         "license" => $iptc['license'] ?? rtrim($baseUrl, '/'),
                         "acquireLicensePage" => $iptc['acquireLicensePage'] ?? rtrim($baseUrl, '/'),
@@ -210,6 +212,9 @@ class YellowTable {
                             "name" => $creatorName,
                         ],
                         "copyrightNotice" => $iptc['copyrightNotice'] ?? $creatorName,
+                        "width" => $imageData[0],
+                        "height" => $imageData[1],
+                        "inLanguage" => $this->yellow->page->get("language")
                     ];
 
                     $imagesStructured[] = $structuredImage;
