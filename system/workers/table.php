@@ -195,6 +195,7 @@ class YellowTable {
                             $iptc['acquireLicensePage'] = $iptcRaw["2#105"][0] ?? null;  // IPTC "Headline" or custom field
                             $iptc['creditText'] = $iptcRaw["2#110"][0] ?? null;          // IPTC "Credit"
                             $iptc['copyrightNotice'] = $iptcRaw["2#116"][0] ?? null;     // IPTC "Copyright Notice"
+                            $iptc['keywords'] = isset($iptcRaw["2#025"]) ? implode(", ", $iptcRaw["2#025"]) : ""; // IPTC "Keywords"
                         }
                     }
 
@@ -202,7 +203,7 @@ class YellowTable {
                         "@context" => "https://schema.org/",
                         "@type" => "ImageObject",
                         "@id" => rtrim($baseUrl, '/') . '/' . ltrim($image, '/'),
-                        "url" => rtrim($baseUrl, '/') . '/' . ltrim($image, '/'),
+                        "url" => $this->yellow->page->getUrl(),
                         "contentUrl" => rtrim($baseUrl, '/') . '/' . ltrim($image, '/'),
                         "license" => $iptc['license'] ?? rtrim($baseUrl, '/'),
                         "acquireLicensePage" => $iptc['acquireLicensePage'] ?? rtrim($baseUrl, '/'),
@@ -214,7 +215,16 @@ class YellowTable {
                         "copyrightNotice" => $iptc['copyrightNotice'] ?? $creatorName,
                         "width" => $imageData[0],
                         "height" => $imageData[1],
-                        "inLanguage" => $this->yellow->page->get("language")
+                        "inLanguage" => $this->yellow->page->get("language"), // images metadata language
+                        "keywords" => $iptc['keywords'] ?? "", // ToDo: Add more keywords, e.g. "family, portrait, autumn, forest"
+                    //     "name" => pathinfo($image, PATHINFO_FILENAME), // ToDo: Short photo title, e.g. "Family Portrait in Autumn Forest"
+                    //     "description" => $iptc['creditText'] ?? "Image from Labrador PhotoLab", //ToDo: Full contextual explanation - Include who, what, where, when, mood, and style
+                        // "subjectOf" => [
+                        //     "@type" => "Service",
+                        //     "serviceType" => "Photography", // ToDo: More specific service type
+                        //     "name" => "Newborn baby in a blanket", // same as "name" above
+                        //     "url" => "pricelisturl#newborn" // link to pricelist with #hash to the service pricelistUrl + serviceType-related section's name
+                        // ]
                     ];
 
                     $imagesStructured[] = $structuredImage;
