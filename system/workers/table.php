@@ -57,6 +57,163 @@ class YellowTable {
 
         return $h1;
     }
+    /**
+     * Read multilingual dc:title and dc:description from an image's XMP.
+     *
+     * Returns:
+     * [
+     *   'title' => [ 'en' => '...', 'et' => '...', ... ],
+     *   'description' => [ 'en' => '...', 'et' => '...', ... ]
+     * ]
+     *
+     * Works for XMP packets wrapped in <x:xmpmeta>... or raw <rdf:RDF> blocks.
+     */
+    function fastReadMultilingualXmp(string $filename): array {
+        if (!is_readable($filename)) {
+            throw new InvalidArgumentException("File not readable: $filename");
+        }
+
+        $fp = fopen($filename, 'rb');
+        if (!$fp) {
+            throw new RuntimeException("Unable to open file: $filename");
+        }
+
+        // Search markers (both common wrappers)
+        $startMarkers = ["<x:xmpmeta", "<rdf:RDF"];
+        $endMarkers   = ["</x:xmpmeta>", "</rdf:RDF>"];
+
+        $buffer = '';
+        $foundStart = false;
+        $xmp = '';
+        $chunkSize = 65536; // 64KB chunks
+
+        // Stream until we find a start marker, then keep reading until we find the corresponding end marker
+        while (!feof($fp)) {
+            $chunk = fread($fp, $chunkSize);
+            if ($chunk === false) break;
+            $buffer .= $chunk;
+
+            if (!$foundStart) {
+                // attempt to find any start marker
+                foreach ($startMarkers as $sm) {
+                    $pos = strpos($buffer, $sm);
+                    if ($pos !== false) {
+                        $foundStart = $sm; // which marker matched
+                        // trim buffer to start at marker to reduce memory
+                        $buffer = substr($buffer, $pos);
+                        break;
+                    }
+                }
+            }
+
+            if ($foundStart) {
+                // Check for end marker(s)
+                foreach ($endMarkers as $em) {
+                    $posEnd = strpos($buffer, $em);
+                    if ($posEnd !== false) {
+                        // include the end marker length
+                        $endPos = $posEnd + strlen($em);
+                        $xmp = substr($buffer, 0, $endPos);
+                        // we found the full packet; stop streaming
+                        fclose($fp);
+                        return $this->parseXmpWithXmlReader($xmp);
+                    }
+                }
+
+                // if the buffer grows too large (XMP normally small, but be safe),
+                // keep only recent portion to avoid memory blowup
+                if (strlen($buffer) > 1024 * 1024 * 4) { // 4 MB
+                    // keep last 2MB
+                    $buffer = substr($buffer, - (1024 * 1024 * 2));
+                }
+            } else {
+                // keep buffer small until we find start marker
+                if (strlen($buffer) > 1024 * 1024 * 2) {
+                    $buffer = substr($buffer, - (1024 * 1024)); // keep last 1MB
+                }
+            }
+        }
+
+        fclose($fp);
+
+        // If we reach here, maybe the file had an XMP at the very end but we didn't detect end marker yet
+        // Try one last regex on whatever we accumulated
+        if ($buffer) {
+            if (preg_match('/<x:xmpmeta.*?<\/x:xmpmeta>/s', $buffer, $m) || preg_match('/<rdf:RDF.*?<\/rdf:RDF>/s', $buffer, $m)) {
+                $xmp = $m[0];
+                return $this->parseXmpWithXmlReader($xmp);
+            }
+        }
+
+        // nothing found
+        return ['title' => [], 'description' => []];
+    }
+
+    /**
+     * Parse an XMP XML string with XMLReader (streaming) and extract rdf:li xml:lang entries
+     */
+    public function parseXmpWithXmlReader(string $xmp): array {
+        $result = ['title' => [], 'description' => []];
+
+        $reader = new XMLReader();
+        // XMLReader::XML expects a full XML fragment; ensure we have a single root if necessary
+        if (!$reader->XML($xmp, null, LIBXML_NONET)) {
+            // fallback: try wrapping
+            $wrapped = "<root>$xmp</root>";
+            if (!$reader->XML($wrapped, null, LIBXML_NONET)) {
+                return $result;
+            }
+        }
+
+        $stack = []; // element name stack to track ancestors
+        while ($reader->read()) {
+            if ($reader->nodeType === XMLReader::ELEMENT) {
+                $local = $reader->localName;
+                array_push($stack, $local);
+
+                // If element is <rdf:li>, grab its text and xml:lang attribute and check ancestor
+                if (strcasecmp($local, 'li') === 0) {
+                    // get xml:lang attribute (prefer proper xml namespace)
+                    $lang = $reader->getAttributeNs('http://www.w3.org/XML/1998/namespace', 'lang');
+                    if ($lang === null) {
+                        // try generic non-namespaced attribute 'lang' or 'xml:lang' fallback
+                        $lang = $reader->getAttribute('lang') ?: $reader->getAttribute('xml:lang') ?: '';
+                    }
+
+                    // read the content of the li (text)
+                    $text = $reader->readString();
+                    $text = trim($text);
+
+                    // find nearest ancestor being 'title' or 'description' (case-insensitive)
+                    $ancestor = null;
+                    for ($i = count($stack) - 2; $i >= 0; $i--) {
+                        $n = strtolower($stack[$i]);
+                        if ($n === 'title' || $n === 'description') {
+                            $ancestor = $n;
+                            break;
+                        }
+                    }
+                    if ($ancestor !== null) {
+                        $key = $lang !== '' ? $lang : 'x-default';
+                        // avoid overwriting existing same-lang entries (prefer first)
+                        if (!isset($result[$ancestor][$key])) {
+                            $result[$ancestor][$key] = $text;
+                        } else {
+                            // if duplicate, append numeric suffix to preserve
+                            $i = 1;
+                            while (isset($result[$ancestor]["{$key}-{$i}"])) $i++;
+                            $result[$ancestor]["{$key}-{$i}"] = $text;
+                        }
+                    }
+                }
+            } elseif ($reader->nodeType === XMLReader::END_ELEMENT) {
+                array_pop($stack);
+            }
+        }
+
+        $reader->close();
+        return $result;
+    }
     
     // Handle page content element
     public function onParseContentElement($page, $name, $text, $attributes, $type) {
@@ -171,7 +328,6 @@ class YellowTable {
             //Structured imagesObject data
             $baseUrl = $this->yellow->toolbox->detectServerUrl();
             $creatorName = "Tatjana Mihhailova";
-            
 
             $imagesStructured = [];
 
@@ -183,6 +339,8 @@ class YellowTable {
                 });
                 
                 foreach ($images as $image) {
+                    $image_title = trim($this->fastReadMultilingualXmp($image)['title'][$this->yellow->page->get("language")], '"') ?? "";
+                    $image_description = trim($this->fastReadMultilingualXmp($image)['description'][$this->yellow->page->get("language")], '"') ?? "";
                     $iptc = [];
 
                     // Get IPTC metadata
@@ -215,10 +373,9 @@ class YellowTable {
                         "copyrightNotice" => $iptc['copyrightNotice'] ?? $creatorName,
                         "width" => $imageData[0],
                         "height" => $imageData[1],
-                        "inLanguage" => $this->yellow->page->get("language"), // images metadata language
-                        "keywords" => $iptc['keywords'] ?? "", // ToDo: Add more keywords, e.g. "family, portrait, autumn, forest"
-                    //     "name" => pathinfo($image, PATHINFO_FILENAME), // ToDo: Short photo title, e.g. "Family Portrait in Autumn Forest"
-                    //     "description" => $iptc['creditText'] ?? "Image from Labrador PhotoLab", //ToDo: Full contextual explanation - Include who, what, where, when, mood, and style
+                        "inLanguage" => $this->yellow->page->get("language") // images metadata language
+                        // "keywords" => $iptc['keywords'] ?? "", // ToDo: Add more keywords, e.g. "family, portrait, autumn, forest"
+
                         // "subjectOf" => [
                         //     "@type" => "Service",
                         //     "serviceType" => "Photography", // ToDo: More specific service type
@@ -226,6 +383,8 @@ class YellowTable {
                         //     "url" => "pricelisturl#newborn" // link to pricelist with #hash to the service pricelistUrl + serviceType-related section's name
                         // ]
                     ];
+                    trim((string)$image_title) !== '' && $structuredImage['name'] = $image_title;
+                    trim((string)$image_description) !== '' && $structuredImage['description'] = $image_description;
 
                     $imagesStructured[] = $structuredImage;
                 }
@@ -233,7 +392,7 @@ class YellowTable {
 
             // Output JSON-LD
             $output .= '<script type="application/ld+json">' . PHP_EOL;
-            $output .= json_encode($imagesStructured, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . PHP_EOL;
+            $output .= json_encode($imagesStructured, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . PHP_EOL;
             $output .= '</script>';
 
             //END of Structured imagesObject data
