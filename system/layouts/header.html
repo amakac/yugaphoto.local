@@ -16,6 +16,14 @@
 <meta name="author" content="<?php echo $this->yellow->page->getHtml("author") ?>" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <base target="_self">
+<?php $pagesMultiLanguage = $this->yellow->content->multi($this->yellow->page->location) ?>
+<?php if (count($pagesMultiLanguage) > 1): ?>
+<?php foreach($pagesMultiLanguage as $page): ?>
+<?php if ($page->isActive() != 'active'): ?>
+<link rel="alternate" hreflang="<?php echo $page->getHtml("language") ?>" href="<?php echo rtrim($this->yellow->toolbox->detectServerUrl(),"/") . $page->getLocation(true) ?>" />
+<?php endif ?>
+<?php endforeach ?>
+<?php endif ?>
 <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/media/themes/yugaphoto/fonts/icomoon/style.css">
 <link rel="stylesheet" href="/media/themes/yugaphoto/css/bootstrap.min.css">
@@ -45,7 +53,6 @@
 <script src="/media/themes/yugaphoto/js/jquery.mousewheel.min.js"></script>
 <script src="/media/themes/yugaphoto/js/imagesloaded.pkgd.min.js"></script>
 <?php echo $this->yellow->page->getExtraHtml("header") ?>
-<?php $pagesMultiLanguage = $this->yellow->content->multi($this->yellow->page->location) ?>
 </head>
 <body>
   <script>

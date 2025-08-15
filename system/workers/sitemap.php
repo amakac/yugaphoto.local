@@ -39,7 +39,11 @@ class YellowSitemap {
     public function onParsePageExtra($page, $name) {
         $output = null;
         if ($name=="header") {
-            $locationSitemap = $this->yellow->system->get("coreServerBase").$this->yellow->system->get("sitemapLocation");
+            $locationSitemap = $this->yellow->system->get("coreServerBase");
+            if($this->yellow->page->getHtml("language") !== "et") {
+                $locationSitemap .= "/".$this->yellow->page->getHtml("language");
+            }
+            $locationSitemap .= $this->yellow->system->get("sitemapLocation");
             $locationSitemap .= $this->yellow->lookup->normaliseArguments("page:".$this->yellow->system->get("sitemapFileXml"));
             $output = "<link rel=\"sitemap\" type=\"text/xml\" href=\"$locationSitemap\" />\n";
         }
